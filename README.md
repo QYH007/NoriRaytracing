@@ -3,35 +3,67 @@ This is a record of the final project of ETH Advanced Computer Graphics cource. 
 ## Introduction
 
 ### Inspirational Image
+
 The topic of the competition this year is 'The more you look'. Which means we are encouraged to create visual masterpieces that attract viewers to uncover amazing detail.
 ![checkerborad](/images/MotivationalImage.png)
 
 My idea is to create a checkerborad type image. The Inspirational Image is created by AI, but I wanted to render it manually to meet the topic.
 
 ### Features completed
+
+- Path Tracing Intergrator
+  
+  - Direct Illumination: Emitter sampling, Material sampling, Multiple importance sampling
+  - Global Illumination: Material sampling, Multiple importance sampling
+- Photon mapping Intergrator
 - Modeling mesh
+- Microfacet BRDF sampling
+- Dielectric BSDF
 - Object instancing
-- Addictional emitter: 
-    - distant light
-    - MipMaping
-- Environment map emitter
+- Addictional emitter:
+  
+  - Point / Area / Distant light
+  - Environment map emitter
+- MipMaping
 - Depth of Field
 
 ## Implementation & Validation
 
+### Path Tracing Intergrators
+
+#### Direct Illumination:
+
+|      | odyssey | veach |
+| ---- | ------- | ----- |
+| ems  |    ![ems](/reports/homework-3/images/odyssey_ems.png)     |  ![ems](/reports/homework-3/images/veach_ems.png)       |
+| mats |   ![mats](/reports/homework-3/images/odyssey_mats.png)      |    ![mats](/reports/homework-3/images/veach_mats.png)     |
+| mis  |   ![vis](/reports/homework-3/images/odyssey_mis.png)      |  ![vis](/reports/homework-3/images/veach_mis.png)      |
+
+#### Global Illumination:
+
+|      | cbox| cgltri | table |
+| ---- | ------- | ----- | --- |
+| mats |    ![mats](/reports/homework-4/images/cbox_path_mats.png)     |   ![mats](/reports/homework-4/images/cgltri_path_mats.png)         |  ![mats](/reports/homework-4/images/table_path_mats.png)  |
+| mis |    ![mis](/reports/homework-4/images/cbox_path_mis.png)     |   ![mis](/reports/homework-4/images/cgltri_path_mis.png)         |  ![mis](/reports/homework-4/images/table_path_mis.png)  |
+| pmap|   ![pmap](/reports/homework-4/images/cbox_pmap.png)     |   ![pmap](/reports/homework-4/images/cgltri_pmap.png)         | ![pmap](/reports/homework-4/images/table_path_pmap.png)  |
+
+
+
+
 ### Modeling mesh
+
 To achieve the sense of order and coincidence in a picture, we need to select proper objects and place them in the correct direction and position. And in some of the cases, we need to modified a little bit on the objects to generate a perfect division in vision.
 
 I have been working in blender by doing translating, rotating, scaling, and model modification on models, camera, and the light source in the scene, to make the whole picture to achieve the result that we expected under the effect of light and shadow.
 
 I also build a grid framework to help me adjusting object in the camera view.
 
-
 **Result:**
-|                                    |             |
-| -------------------------------------- | ------- |
-| ![300](/images/model_overview.png) | ![300](/images/model_camera.png)        |
-| ![300](/images/model_modeling.png)|![300](/images/model_mirror.png)|
+
+|                                    |                                  |
+| ---------------------------------- | -------------------------------- |
+| ![300](/images/model_overview.png) | ![300](/images/model_camera.png) |
+| ![300](/images/model_modeling.png) | ![300](/images/model_mirror.png) |
 
 **Remark:**
 the sence generated in blender can be export to mitusba3 by applying add-on [Mitsuba-Blender](https://github.com/mitsuba-renderer/mitsuba-blender), to Nori by applying add-on [Nori-Blender](https://github.com/wjakob/nori/tree/master/ext/plugin)
@@ -52,12 +84,12 @@ src/path_mis.cpp
 
 In realistic.cpp, we need to sample point on the 'lens', then use Gaussian lens equation to compute the focus point where sampled ray and central ray intersect, and finally to get the sampled ray from the sampled point on 'lens'.
 
-|    |   |
-| -------------------------------------- | ------- |
-| ![300](/images/small.png)<p align='center'>aperture = 0.1</p> | ![300](/images/normalCamera.png)<p align='center'>aperture = 1</p>        |
-| ![300](/images/big.png)<p align='center'>aperture = 2</p>|![300](/images/superbig.png)<p align='center'>aperture = 3</p>|
+|                                                               |                                                                    |
+| ------------------------------------------------------------- | ------------------------------------------------------------------ |
+| ![300](/images/small.png)aperture = 0.1 | ![300](/images/normalCamera.png)aperture = 1 |
+| ![300](/images/big.png)aperture = 2     | ![300](/images/superbig.png)aperture = 3     |
 
-Note that the focal length are fixed in the image above. 
+Note that the focal length are fixed in the image above.
 
 ### Emitter: Distant Light & Environment Map Emitter
 
@@ -96,9 +128,11 @@ Distant light contribution can be collect as a random emitter in getRandomEmitte
 **Results:**
 
 ![300](/images/distant_nori.png)
+
 <p align='center'>light from left</p>
 
 ![300](/images/distant_left.png)
+
 <p align='center'>light from right</p>
 
 **envlight.cpp**
@@ -124,6 +158,7 @@ And when doing Emitter sampling, these emitter should be seem as normal emitters
 
 **Results:**
 ![300](/images/multilight_nori.png)
+
 <p align='center'>Combaniation of Distance light & sky environment light</p>
 
 ### MipMaping
@@ -155,19 +190,19 @@ It calculate the max level by log2(MaxResolusion), and create higher level of Mi
 
 When being query, it take the differential value L to culculate the Mipmap level and perform **trilinear interpolation** to compute the color between level and level+1.
 
-| | |
-|--|--|
-|Level0|![0](/images/Level_0.jpg)|
-|Level1|![0](/images/Level_1.jpg)|
-|Level2|![0](/images/Level_2.jpg)|
-|Level3|![0](/images/Level_3.jpg)|
-|Level4|![0](/images/Level_4.jpg)|
-|Level5|![0](/images/Level_5.jpg)|
-|Level6|![0](/images/Level_6.jpg)|
-|Level7|![0](/images/Level_7.jpg)|
-|Level8|![0](/images/Level_8.jpg)|
-|Level9|![0](/images/Level_9.jpg)|
-|Level10|![0](/images/Level_10.jpg)|
+|         |                            |
+| ------- | -------------------------- |
+| Level0  | ![0](/images/Level_0.jpg)  |
+| Level1  | ![0](/images/Level_1.jpg)  |
+| Level2  | ![0](/images/Level_2.jpg)  |
+| Level3  | ![0](/images/Level_3.jpg)  |
+| Level4  | ![0](/images/Level_4.jpg)  |
+| Level5  | ![0](/images/Level_5.jpg)  |
+| Level6  | ![0](/images/Level_6.jpg)  |
+| Level7  | ![0](/images/Level_7.jpg)  |
+| Level8  | ![0](/images/Level_8.jpg)  |
+| Level9  | ![0](/images/Level_9.jpg)  |
+| Level10 | ![0](/images/Level_10.jpg) |
 
 **ray.h**
 
@@ -184,20 +219,24 @@ When mesh being hit, compute the differential value(changing rate from clip coor
 
 **path_mis.cpp**
 
-Pass the differential value inside Interscetion into the mipMap query to get the color. 
+Pass the differential value inside Interscetion into the mipMap query to get the color.
 
 ![300](/images/high_imagemapping.png)
+
 <p align='center'>normal secne</p>
 
 ![300](/images/high_mipmapping.png)
+
 <p align='center'>Applying Mipmapping</p>
 
 ![300](/images/mipmapping.png)
+
 <p align='center'>Level_distribution</p>
 
 ### Object Instancing
 
 File added
+
 ```
 include/nori/instanct.h
 include/nori/reference.h
@@ -206,6 +245,7 @@ src/instance.cpp
 ```
 
 File touched
+
 ```
 include/nori/shape.h
 src/scene.cpp
@@ -227,14 +267,13 @@ The class representing instance. The shape-methods are overrided, to map the ray
 
 Modified and added some functions to support the instancing system.
 
-
 **Result:**
 
-
-|  |                          |
-| ---------- | ------------------------------- |
-| ![300](/images/noInstance.png)<p align='center'>origin ball</p>          | ![300](/images/Instance.png)<p align='center'>with instance</p>     |
+|                                                                 |                                                                 |
+| --------------------------------------------------------------- | --------------------------------------------------------------- |
+| ![300](/images/noInstance.png)origin ball | ![300](/images/Instance.png)with instance |
 
 ## Final Image
 
 ![fishtank](/images/final.png)
+
