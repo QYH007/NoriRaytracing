@@ -45,7 +45,7 @@ My idea is to create a checkerborad type image. The Inspirational Image is creat
 | ---- | ------- | ----- | --- |
 | mats |    ![mats](/reports/homework-4/images/cbox_path_mats.png)     |   ![mats](/reports/homework-4/images/cgltri_path_mats.png)         |  ![mats](/reports/homework-4/images/table_path_mats.png)  |
 | mis |    ![mis](/reports/homework-4/images/cbox_path_mis.png)     |   ![mis](/reports/homework-4/images/cgltri_path_mis.png)         |  ![mis](/reports/homework-4/images/table_path_mis.png)  |
-| pmap|   ![pmap](/reports/homework-4/images/cbox_pmap.png)     |   ![pmap](/reports/homework-4/images/cgltri_pmap.png)         | ![pmap](/reports/homework-4/images/table_path_pmap.png)  |
+| pmap|   ![pmap](/reports/homework-4/images/cbox_pmap.png)     |   ![pmap](/reports/homework-4/images/cgltri_pmap.png)         | ![pmap](/reports/homework-4/images/table_pmap.png)  |
 
 
 
